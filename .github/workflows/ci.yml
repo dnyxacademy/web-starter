@@ -1,0 +1,61 @@
+# Continuous integration.
+#
+# Weeks 1 and 2 have no build step, so this does almost nothing and that is fine —
+# a green tick from day one means you notice the day it turns red.
+# Week 4 teaches testing and CI; by then this file runs your real test suite.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  secrets:
+    name: No committed secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fail if a .env file is committed
+        run: |
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo "::error::A .env file is committed. Remove it, rotate the keys, and tell a mentor."
+            exit 1
+          fi
+          echo "No .env file in the repository."
+
+  test:
+    name: Install and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Is there a Node project yet?
+        id: check
+        run: |
+          if [ -f package.json ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No package.json yet — nothing to install. This is expected in Weeks 1 and 2."
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.found == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        if: steps.check.outputs.found == 'true'
+        run: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+
+      - name: Lint
+        if: steps.check.outputs.found == 'true'
+        run: npm run lint --if-present
+
+      - name: Test
+        if: steps.check.outputs.found == 'true'
+        run: npm test --if-present

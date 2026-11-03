@@ -34,3 +34,4 @@ desktop.ini
 *.sqlite
 *.sqlite3
 *.csv.gz
+.claude/settings.local.json

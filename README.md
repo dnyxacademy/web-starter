@@ -55,6 +55,10 @@ The day-by-day plan is in [docs/week-plan.md](docs/week-plan.md). Your tickets a
 Dnyx Learn; the full assignment briefs are in
 [MERN-Assignments](https://github.com/dnyxacademy/MERN-Assignments).
 
+**Not chosen a project yet?** Six briefs, scoped to four weeks, are in
+[project-ideas](https://github.com/dnyxacademy/project-ideas) — along with outside idea catalogues
+if none of them appeals. Pick in Week 1 and get it approved by Tuesday.
+
 ## How you are marked
 
 Delivering the tickets, code quality, **pull request habits**, your weekly note, and going beyond the
